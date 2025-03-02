@@ -11,7 +11,14 @@ on:
       - hotfix/*
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+
+    # we can try to run the job on different operating systems
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.9, 3.10, 3.13]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4   # clone the repository
@@ -19,7 +26,8 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9.21' 
+          # python-version: '3.9.21'
+          python-version: ${{matrix.python-version}} 
       
       - run: | 
           python --version
@@ -31,25 +39,3 @@ jobs:
       
       - name: Lint code
         run: flake8 example.py
-    # steps:
-    #   - name: Checkout code
-    #     # `uses` is used for reusing an action of the GitHub Actions
-    #     uses: actions/checkout@v4   # clone the repository
-      
-    #   - name: Setup Python
-    #     uses: actions/setup-python@v5
-    #     with:
-    #       python-version: '3.9.21' 
-    #   # - run: python my_script.py  # Run a Python script
-        
-    #     # | is a multiline string in YAML (so it will exec multiple commands)
-    #   - run: | 
-    #       python --version
-    #       python -m pip --upgrade pip
-    #       pip --version
-      
-    #   - name: Install dependencies
-    #     run: pip install -r requirements.txt
-      
-    #   - name: Lint code
-    #     run: flake8 example.py
