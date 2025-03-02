@@ -1,7 +1,3 @@
-import math
-from mlflow.pyfunc import PythonModel
-
-
 def greeting(name):
     return f"Hello, {name}!"
 
