@@ -51,5 +51,5 @@ jobs:
         python-version: '3.9.21'
     
     - name: Run Unit tests
-      run: python -m test discover
+      run: python -m unittest discover
        
