@@ -42,16 +42,17 @@ jobs:
       - name: Lint code
         run: flake8 example.py
   unit-test:
-   runs-on: ubuntu-latest
-   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.9.21'
-    
-    - name: Run Unit tests
-      run: python -m unittest discover
-       
+    needs: lint   # requires the lint job to be completed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9.21'
+      
+      - name: Run Unit tests
+        run: python -m unittest discover
+        
