@@ -10,6 +10,7 @@ def subtract(a, b):
     return a - b
 
 
-print(greeting("World"))
-print(add(1, 2))
-print(subtract(5, 3))
+if __name__ == "__main__":
+    print(greeting("Alice"))
+    print(add(1, 2))
+    print(subtract(5, 3))
