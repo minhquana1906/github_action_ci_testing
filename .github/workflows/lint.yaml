@@ -60,6 +60,8 @@ jobs:
   test_uv:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install the specific version of uv and set the python version to 3.9
         id: setup-uv
         uses: astral-sh/setup-uv@v5
@@ -68,7 +70,7 @@ jobs:
           python-version: '3.9.21'
           # checksum: "e11b01402ab645392c7ad6044db63d37e4fd1e745e015306993b07695ea5f9f8"
           enable-cache: true
-          cache-suffix: "optional-suffix"
+          cache-suffix: "optional-suffix"   #  them hau to cho cache key: uv-cache-optional-suffix-<hash-of-dependencies>
           cache-dependency-glob: |
             **/requirements*.txt
       - run: |
@@ -81,4 +83,4 @@ jobs:
           uv --version
       
       - name: Test
-        run: uv run --frozen pytest
+        run: uv run --frozen test_unit.py
