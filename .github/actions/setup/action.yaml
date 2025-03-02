@@ -1,0 +1,9 @@
+name: "install uv"
+description: "install uv using the comunity action"
+runs:
+  using: "composite"
+  steps:
+    - name: install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.6.2"
