@@ -66,7 +66,7 @@ jobs:
         with:
           version: '0.6.2'
           python-version: '3.9.21'
-          checksum: "e11b01402ab645392c7ad6044db63d37e4fd1e745e015306993b07695ea5f9f8"
+          # checksum: "e11b01402ab645392c7ad6044db63d37e4fd1e745e015306993b07695ea5f9f8"
           enable-cache: true
           cache-suffix: "optional-suffix"
           cache-dependency-glob: |
