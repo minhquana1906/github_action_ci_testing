@@ -11,48 +11,74 @@ on:
       - dev
       - feature/*
       - hotfix/*
-jobs:
-  lint:
-    # runs-on: ubuntu-latest
+# jobs:
+#   lint:
+#     # runs-on: ubuntu-latest
 
-    # we can try to run the job on different operating systems
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.13']
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4   # clone the repository
+#     # we can try to run the job on different operating systems
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         os: [ubuntu-latest, windows-latest, macos-latest]
+#         python-version: ['3.9', '3.10', '3.13']
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4   # clone the repository
       
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          # python-version: '3.9.21'
-          python-version: ${{matrix.python-version}} 
+#       - name: Setup Python
+#         uses: actions/setup-python@v5
+#         with:
+#           # python-version: '3.9.21'
+#           python-version: ${{matrix.python-version}} 
       
-      - run: | 
-          python --version
-          python -m pip install --upgrade pip
-          pip --version
+#       - run: | 
+#           python --version
+#           python -m pip install --upgrade pip
+#           pip --version
       
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt
       
-      - name: Lint code
-        run: flake8 example.py
-  unit-test:
-    needs: lint   # requires the lint job to be completed
+#       - name: Lint code
+#         run: flake8 example.py
+#   unit-test:
+#     needs: lint   # requires the lint job to be completed
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+      
+#       - name: Setup Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.9.21'
+      
+#       - name: Run Unit tests
+#         run: python -m unittest discover
+        
+jobs:
+  test_uv:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install the specific version of uv and set the python version to 3.9
+        id: setup-uv
+        uses: astral-sh/setup-uv@v5
         with:
+          version: '0.6.2'
           python-version: '3.9.21'
+          checksum: "e11b01402ab645392c7ad6044db63d37e4fd1e745e015306993b07695ea5f9f8"
+          enable-cache: true
+          cache-suffix: "optional-suffix"
+          cache-dependency-glob: |
+            **/requirements*.txt
+      - run: |
+          uv python install 3.9.21
       
-      - name: Run Unit tests
-        run: python -m unittest discover
-        
+      - name: Check the installed version of uv
+        if: steps.setup-uv.outputs.cache-hit == 'true'
+        run: | 
+          echo "Cache was restored"
+          uv --version
+      
+      - name: Test
+        run: uv run --frozen pytest
