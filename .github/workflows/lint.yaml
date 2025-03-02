@@ -76,6 +76,9 @@ jobs:
       - run: |
           uv python install 3.9.21
       
+      - name: install dependencies
+        run: uv run --frozen pip install -r requirements.txt
+      
       - name: Check the installed version of uv
         if: steps.setup-uv.outputs.cache-hit == 'true'
         run: | 
@@ -85,5 +88,4 @@ jobs:
       - name: Test
         run: uv run --frozen test_unit.py
 
-      - name: install dependencies
-        run: uv run --frozen pip install -r requirements.txt
+      
